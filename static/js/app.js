@@ -12,6 +12,10 @@ let appState = {
 const refreshBtn = document.getElementById('refresh-btn');
 const iconRefresh = refreshBtn.querySelector('.icon-refresh');
 const exportCsvBtn = document.getElementById('export-csv-btn');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const iconSun = themeToggleBtn.querySelector('.icon-sun');
+const iconMoon = themeToggleBtn.querySelector('.icon-moon');
+const themeToggleText = themeToggleBtn.querySelector('.btn-text');
 const iconSpinner = refreshBtn.querySelector('.icon-spinner');
 const searchInput = document.getElementById('search-input');
 const filterPills = document.querySelectorAll('.pill');
@@ -43,6 +47,7 @@ const composerCloseBtn = document.getElementById('composer-close-btn');
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    initTheme();
     fetchReleaseNotes();
 });
 
@@ -51,6 +56,7 @@ function setupEventListeners() {
     refreshBtn.addEventListener('click', fetchReleaseNotes);
     retryBtn.addEventListener('click', fetchReleaseNotes);
     exportCsvBtn.addEventListener('click', exportToCSV);
+    themeToggleBtn.addEventListener('click', toggleTheme);
     
     // Search input filtering
     searchInput.addEventListener('input', (e) => {
@@ -456,6 +462,39 @@ function exportToCSV() {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     showToast('CSV Exported!');
+}
+
+// Theme toggle logic
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        iconSun.classList.add('hidden');
+        iconMoon.classList.remove('hidden');
+        themeToggleText.textContent = 'Dark Mode';
+    } else {
+        document.body.classList.remove('light-mode');
+        iconSun.classList.remove('hidden');
+        iconMoon.classList.add('hidden');
+        themeToggleText.textContent = 'Light Mode';
+    }
+}
+
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-mode');
+    if (isLight) {
+        localStorage.setItem('theme', 'light');
+        iconSun.classList.add('hidden');
+        iconMoon.classList.remove('hidden');
+        themeToggleText.textContent = 'Dark Mode';
+        showToast('Light theme activated!');
+    } else {
+        localStorage.setItem('theme', 'dark');
+        iconSun.classList.remove('hidden');
+        iconMoon.classList.add('hidden');
+        themeToggleText.textContent = 'Light Mode';
+        showToast('Dark theme activated!');
+    }
 }
 
 // Custom Toast notification

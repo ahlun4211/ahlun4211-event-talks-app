@@ -943,3 +943,98 @@ body {
         display: none; /* We can toggle filters or just rely on layout */
     }
 }
+
+/* Light Mode Variables & Styles */
+body.light-mode {
+    --bg-app: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-widget: rgba(241, 245, 249, 0.85);
+    --bg-composer: #ffffff;
+    
+    --border-color: rgba(0, 0, 0, 0.08);
+    --border-hover: rgba(99, 102, 241, 0.5);
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    
+    --glow-card-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 0 12px rgba(99, 102, 241, 0.15);
+}
+
+body.light-mode .logo-text h1 {
+    background: linear-gradient(to right, #0f172a, #475569);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .date-header {
+    background: var(--bg-app);
+}
+
+body.light-mode .date-header h3 {
+    color: var(--text-primary);
+    background: #e2e8f0;
+}
+
+body.light-mode .search-input-wrapper input {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+body.light-mode .stat-card {
+    background: #f1f5f9;
+}
+
+body.light-mode .stat-value {
+    color: #0f172a;
+}
+
+body.light-mode .original-text-content {
+    background: #f8fafc;
+}
+
+body.light-mode .composer-empty-state h3 {
+    color: #0f172a;
+}
+
+body.light-mode .composer-body h3 {
+    color: #0f172a;
+}
+
+body.light-mode .tweet-box-wrapper {
+    background: #f8fafc;
+}
+
+body.light-mode .tweet-box-wrapper textarea {
+    color: #0f172a;
+}
+
+body.light-mode .composer-header {
+    background: #f1f5f9;
+}
+
+body.light-mode .composer-footer {
+    background: #f1f5f9;
+}
+
+body.light-mode .btn-secondary {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+
+body.light-mode .btn-secondary:hover {
+    background: #f1f5f9;
+}
+
+body.light-mode .pill:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .pill.active {
+    background: rgba(99, 102, 241, 0.08);
+}
+
+body.light-mode .update-card.selected {
+    background: rgba(99, 102, 241, 0.04);
+}
+
