@@ -11,6 +11,7 @@ let appState = {
 // DOM Elements
 const refreshBtn = document.getElementById('refresh-btn');
 const iconRefresh = refreshBtn.querySelector('.icon-refresh');
+const exportCsvBtn = document.getElementById('export-csv-btn');
 const iconSpinner = refreshBtn.querySelector('.icon-spinner');
 const searchInput = document.getElementById('search-input');
 const filterPills = document.querySelectorAll('.pill');
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupEventListeners() {
     refreshBtn.addEventListener('click', fetchReleaseNotes);
     retryBtn.addEventListener('click', fetchReleaseNotes);
+    exportCsvBtn.addEventListener('click', exportToCSV);
     
     // Search input filtering
     searchInput.addEventListener('input', (e) => {
@@ -416,6 +418,44 @@ function shareOnTwitter() {
     const tweetText = tweetTextarea.value;
     const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(shareUrl, '_blank', 'noopener,noreferrer,width=550,height=420');
+}
+
+// Export current updates to CSV
+function exportToCSV() {
+    if (appState.filteredReleases.length === 0) {
+        showToast('No updates to export!');
+        return;
+    }
+    
+    const rows = [['Date', 'Type', 'Update Text', 'Link']];
+    
+    appState.filteredReleases.forEach(entry => {
+        entry.updates.forEach(update => {
+            rows.push([
+                entry.date,
+                update.type,
+                update.text,
+                entry.link
+            ]);
+        });
+    });
+    
+    const csvContent = rows.map(row => 
+        row.map(field => `"${(field || '').replace(/"/g, '""')}"`).join(',')
+    ).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    const dateStr = new Date().toISOString().split('T')[0];
+    link.setAttribute("download", `bigquery_release_notes_${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast('CSV Exported!');
 }
 
 // Custom Toast notification
