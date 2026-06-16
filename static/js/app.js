@@ -18,6 +18,7 @@ const iconMoon = themeToggleBtn.querySelector('.icon-moon');
 const themeToggleText = themeToggleBtn.querySelector('.btn-text');
 const iconSpinner = refreshBtn.querySelector('.icon-spinner');
 const searchInput = document.getElementById('search-input');
+const searchClearBtn = document.getElementById('search-clear-btn');
 const filterPills = document.querySelectorAll('.pill');
 const feedContainer = document.getElementById('feed-container');
 const loadingState = document.getElementById('loading-state');
@@ -61,7 +62,17 @@ function setupEventListeners() {
     // Search input filtering
     searchInput.addEventListener('input', (e) => {
         appState.searchQuery = e.target.value.toLowerCase();
+        toggleSearchClearBtn();
         applyFiltersAndRender();
+    });
+
+    // Clear search button
+    searchClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        appState.searchQuery = '';
+        toggleSearchClearBtn();
+        applyFiltersAndRender();
+        searchInput.focus();
     });
 
     // Type pills filtering
@@ -260,6 +271,12 @@ function renderTimeline() {
                 <div class="card-header">
                     <span class="card-type-badge">${update.type}</span>
                     <div class="card-actions">
+                        <button class="action-btn btn-compose" title="Draft Tweet about this update">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9"></path>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                        </button>
                         <button class="action-btn btn-copy" title="Copy text to clipboard">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -294,6 +311,13 @@ function renderTimeline() {
             copyBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 copyTextToClipboard(update.text);
+            });
+
+            // Compose Tweet implementation
+            const composeBtn = card.querySelector('.btn-compose');
+            composeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectUpdate(update, entry, uniqueId);
             });
             
             dateGroup.appendChild(card);
@@ -494,6 +518,15 @@ function toggleTheme() {
         iconMoon.classList.add('hidden');
         themeToggleText.textContent = 'Light Mode';
         showToast('Dark theme activated!');
+    }
+}
+
+// Toggle search clear button visibility
+function toggleSearchClearBtn() {
+    if (appState.searchQuery) {
+        searchClearBtn.classList.remove('hidden');
+    } else {
+        searchClearBtn.classList.add('hidden');
     }
 }
 
